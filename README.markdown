@@ -1,7 +1,14 @@
 # catacomb
 
-Encrypts content using public keys from GitHub.
-Encrypted files can then be decrypted using the matching `~/.ssh/id_rsa`.
+
+**forked from <https://github.com/twe4ked/catacomb> - great stuff, 
+I just wanted flexibility with decrypthion!**
+
+
+Encrypts STDIN to STDOUT using public ssh key files or public 
+ssh keys from GitHub.
+
+Decrypts STDIN to STDOUT using secret ssh key files.
 
 ## Installation
 
@@ -25,19 +32,14 @@ export PATH="$PATH:~/bin/"
 ### Encrypting
 
 ``` sh
-catacomb $recipients_github_username < file.txt > encrypted.txt
+catacomb $recipients_github_username|public key filename  < file.txt > encrypted.txt
 ```
 
 ### Decrypting
 
 ``` sh
-catacomb < encrypted.txt
+catacomb $secret_key_filename < encrypted.txt
 ```
-
-## Notes
-
-* Encrypts using the first key retrieved from GitHub
-* Decrypts using `~/.ssh/id_rsa`
 
 ## Licence
 

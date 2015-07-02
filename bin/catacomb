@@ -1,23 +1,29 @@
 #!/bin/bash -e
 
-main() {
-  if [[ -n "$1" ]]; then
-    PUBLIC_KEY="$HOME/.ssh/$1.pub"
 
-    if ! [[ -e "$PUBLIC_KEY" ]]; then
-      retrieve_keys "$1"
+encrypt() {
+
+    if [[ -e "$1" ]] ; then
+      PUBLIC_KEY="$1"
+    else
+      PUBLIC_KEY="$HOME/.ssh/$1.pub"
+      if ! [[ -e "$PUBLIC_KEY" ]]; then
+        retrieve_keys "$1"
+      fi
     fi
 
     TMP_OUT="$(mktemp "${TMPDIR:-/tmp}/$(basename "$0").XXXXXX")"
     trap '{ rm -f "$TMP_OUT"; }' EXIT
 
     if openssl rsautl -encrypt -pubin -inkey <(ssh-keygen -f "$PUBLIC_KEY" -e -m PKCS8) -ssl > "$TMP_OUT"; then
-      echo "-- encrypted with catacomb <https://github.com/twe4ked/catacomb>"
+      echo "-- encrypted with catacomb <https://github.com/mvtango/catacomb>"
       openssl base64 < "$TMP_OUT"
     fi
-  else
-    openssl base64 -d | openssl rsautl -decrypt -inkey ~/.ssh/id_rsa
-  fi
+}
+
+
+decrypt () {
+    openssl base64 -d | openssl rsautl -decrypt -inkey $1
 }
 
 retrieve_keys() {
@@ -28,5 +34,34 @@ retrieve_keys() {
     exit 1
   fi
 }
+
+
+
+main() {
+  if [[ -n "$1" ]]; then
+	 if [[ -e "$1" ]] ; then
+		if (file "$1" | grep public >/dev/null) ; then
+			encrypt $1
+		else
+			decrypt $1
+		fi
+	 else
+		encrypt $1
+	 fi
+  else
+   cat <<HERE
+      USAGE:
+
+      cat plain.txt | $0 [public_key_file|github handle] >cipher.txt
+
+      or
+
+      cat cipher.txt | $0 [secret_key_file] >plain.txt
+
+HERE
+
+  fi
+}
+
 
 main "$1"
