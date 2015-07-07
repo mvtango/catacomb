@@ -1,48 +1,51 @@
 # catacomb
 
-
 **forked from <https://github.com/twe4ked/catacomb> - great stuff, 
-I just wanted flexibility with decrypthion!**
+I just wanted flexibility with decryption.**
 
 
 Encrypts STDIN to STDOUT using public ssh key files or public 
 ssh keys from GitHub.
 
-Decrypts STDIN to STDOUT using secret ssh key files.
 
 ## Installation
 
 Using [fresh], run the following:
 
 ``` sh
-fresh twe4ked/catacomb bin/catacomb --bin
+fresh mvtango/catacomb bin/catacomb --bin
 ```
 
 Manually:
 
 ``` sh
 mkdir ~/bin/
-wget https://raw.github.com/twe4ked/catacomb/master/bin/catacomb ~/bin/catacomb
+wget https://raw.github.com/mvtango/catacomb/master/bin/catacomb ~/bin/catacomb
 export PATH="$PATH:~/bin/"
 # the PATH will need to be set in your shell config
 ```
 
 ## Usage
 
-### Encrypting
+      cat plain.txt | catacomb [public_key_file|github handle] >cipher.txt
 
-``` sh
-catacomb $recipients_github_username|public key filename  < file.txt > encrypted.txt
-```
+      or
 
-### Decrypting
+      cat cipher.txt | catacomb [secret_key_file] >plain.txt
 
-``` sh
-catacomb $secret_key_filename < encrypted.txt
-```
+
+
+## Notes
+
+* Encrypts using a key file or the first key retrieved from GitHub
+* Decrypts using the key file provided on the command line.`
 
 ## Licence
 
 MIT.
+
+## Forked from 
+
+<https://github.com/twe4ked/catacomb/blob/master/bin/catacomb>
 
 [fresh]: https://github.com/freshshell/fresh
