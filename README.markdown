@@ -8,39 +8,39 @@ Encrypted files can then be decrypted using the matching `~/.ssh/id_rsa`.
 Using [fresh], run the following:
 
 ``` sh
-fresh twe4ked/catacomb bin/catacomb --bin
+fresh mvtango/catacomb bin/catacomb --bin
 ```
 
 Manually:
 
 ``` sh
 mkdir ~/bin/
-wget https://raw.github.com/twe4ked/catacomb/master/bin/catacomb ~/bin/catacomb
+wget https://raw.github.com/mvtango/catacomb/master/bin/catacomb ~/bin/catacomb
 export PATH="$PATH:~/bin/"
 # the PATH will need to be set in your shell config
 ```
 
 ## Usage
 
-### Encrypting
 
-``` sh
-catacomb $recipients_github_username < file.txt > encrypted.txt
-```
+      cat plain.txt | catacomb [public_key_file|github handle] >cipher.txt
 
-### Decrypting
+      or
 
-``` sh
-catacomb < encrypted.txt
-```
+      cat cipher.txt | catacomb [secret_key_file] >plain.txt
+
 
 ## Notes
 
-* Encrypts using the first key retrieved from GitHub
-* Decrypts using `~/.ssh/id_rsa`
+* Encrypts using a key file or the first key retrieved from GitHub
+* Decrypts using the key file provided on the command line.`
 
 ## Licence
 
 MIT.
+
+## Forked from 
+
+<https://github.com/twe4ked/catacomb/blob/master/bin/catacomb>
 
 [fresh]: https://github.com/freshshell/fresh
